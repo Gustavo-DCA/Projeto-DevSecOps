@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Commit {
+  id           Int      @id @default(autoincrement())
+  commitId     String
+  message      String?
+  timestamp    DateTime?
+  url          String?
+  authorName   String?
+  authorEmail  String?
+  status       String?
+  statusInt    Int?
+
+  attentions   Attention[]
+}
+
+model Attention {
+  id           Int      @id @default(autoincrement())
+  commitId     Int
+  reason       String
+  timestamp    DateTime?
+  commit       Commit     @relation(fields: [commitId], references: [id])
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  username String  @unique
+  password String
+}
